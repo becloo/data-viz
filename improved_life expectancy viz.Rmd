@@ -1,0 +1,28 @@
+---
+title: "IT Session 8"
+author: "Rebeca Lozano"
+date: "12/03/2021"
+output: pdf_document
+---
+
+Improving previous visualization with better labeling and color scheme.
+
+```{r}
+library(ggplot2)
+library(plotly)
+library(gapminder)
+
+if (require("ggplot2")) {
+p <- gapminder %>%
+  filter(year==1977) %>%
+  ggplot( aes(gdpPercap, lifeExp, size = pop, color=continent)) +
+  geom_point() +
+  theme_bw() +
+  labs(x = "GDP per capita", y = "Life Expectancy", title = "Life expectancy based on GDP, country and continent") +
+  scale_color_brewer(palette = "BuPu")
+}
+
+ggplotly(p)
+
+```
+
