@@ -1,0 +1,64 @@
+---
+title: "IT Session 8"
+author: "Rebeca Lozano"
+date: "11/26/2021"
+output: pdf_document
+---
+
+For lab 8 I created an interactive plot and an animated line chart. 
+
+The code below shows my interactive plot using the gapminder dataset. This plot shows life expectancy based on GDP per capita by country, where hovering over the different data points will give you the GDP per capita, life expectancy, population, and continent details.
+
+```{r}
+install.packages('ggplot2')
+install.packages('plotly')
+install.packages('gapminder')
+
+library(ggplot2)
+library(plotly)
+library(gapminder)
+
+p <- gapminder %>%
+  filter(year==1977) %>%
+  ggplot( aes(gdpPercap, lifeExp, size = pop, color=continent)) +
+  geom_point() +
+  theme_bw()
+
+ggplotly(p)
+
+```
+
+I became intrigued to learn how to create an animated line chart in R. Therefore, I created an animated line chart with the help of the demos presented in the R Graph Gallery.
+
+```{r}
+library(gifski)
+library(png)
+library(ggplot2)
+library(gganimate)
+library(babynames)
+library(hrbrthemes)
+library(tidyverse)
+library(viridis)
+library(gapminder)
+
+# Keep only 3 names
+don <- babynames %>% 
+  filter(name %in% c("Mary", "Anna", "Emma")) %>%
+  filter(sex=="F")
+  
+# Plot
+g <- don %>%
+  ggplot( aes(x=year, y=n, group=name, color=name)) +
+    geom_line() +
+    geom_point() +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Popularity of American names in the previous 30 years") +
+    theme_ipsum() +
+    ylab("Number of babies born") +
+    transition_reveal(year)
+    
+gg <- animate(g, renderer = gifski_renderer())
+
+gif <- save_animation(gg, "output.gif")
+
+```
